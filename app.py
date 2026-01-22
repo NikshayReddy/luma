@@ -123,12 +123,19 @@ def get_bot_response(user_input):
     # Question/Neutral Safety Net
     question_keywords = ['what', 'how', 'why', 'when', 'where', 'who', '?']
     is_question = any(k in user_input.lower() for k in question_keywords)
-    is_short = len(user_input.split()) < 8
+    # Only treat as "too short to be meaningful" if it's REALLY short (e.g., 1-2 words) AND not a clear strong emotion
+    is_short = len(user_input.split()) < 3
     
-    if (is_question or is_short) and detected_emotion_label in ['Joy', 'Surprise']:
+    # Check for strong positive keywords that should override "shortness"
+    positive_keywords = ['happy', 'good', 'great', 'love', 'excellent', 'amazing', 'wonderful', 'joy', 'excited', 'better', 'fine', 'ok', 'okay']
+    has_positive = any(k in user_input.lower() for k in positive_keywords)
+
+    if (is_question or (is_short and not has_positive)) and detected_emotion_label in ['Joy', 'Surprise']:
         if st.session_state.last_emotion in ['Anger', 'Sadness', 'Fear']:
+            # If asking a question or giving a very short non-positive answer, assume context continues
             detected_emotion_label = st.session_state.last_emotion
         else:
+            # Otherwise, treat as Neutral
             detected_emotion_label = 'Neutral'
 
     # Update Session State
@@ -143,10 +150,10 @@ def get_bot_response(user_input):
             f"You are a compassionate mental health companion named Luma. "
             f"The user says: '{user_input}'. "
             f"My internal emotion detection model has identified the user's emotion as '{detected_emotion_label}'. "
-            f"However, please analyze the text yourself. If the text clearly conveys a different emotion "
-            f"(especially negative ones like anger or sadness) that contradicts the internal label, "
-            f"prioritize your own analysis and provide a supportive, empathetic response (max 2-3 sentences) "
-            f"appropriate for the actual emotion. Do not explicitly mention the internal label."
+            f"Please analyze the text yourself. If the text clearly conveys a different emotion "
+            f"that contradicts the internal label, prioritize your own analysis. "
+            f"Provide a supportive, empathetic response (max 2-3 sentences) appropriate for the user's actual emotion. "
+            f"Do not explicitly mention the internal label."
         )
         response = model.generate_content(prompt)
         if response and response.text:
