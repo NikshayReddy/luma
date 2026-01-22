@@ -1,6 +1,4 @@
 django
 google-generativeai
 python-dotenv
-scikit-learn
-joblib
 numpy

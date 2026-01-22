@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 import os
-import joblib
 import random
 import google.generativeai as genai
 from dotenv import load_dotenv
+from ml_model.inference import SGDInference
 
 # Load Environment Variables
 # Assuming .env is in the project root (one level up from manage.py, or two levels up from here)
@@ -15,9 +15,8 @@ load_dotenv(dotenv_path)
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Load ML Model
-model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml_model', 'emotion_model.pkl')
 try:
-    emotion_model = joblib.load(model_path)
+    emotion_model = SGDInference()
     print("ML Model loaded successfully")
 except Exception as e:
     print(f"Error loading ML model: {e}")
@@ -100,8 +99,8 @@ def get_response(request):
             detected_emotion_id = -1
             
             if emotion_model:
-                prediction = emotion_model.predict([user_input])
-                detected_emotion_id = prediction[0] # This will be an integer (0-5)
+                detected_emotion_id = emotion_model.predict(user_input)
+                # detected_emotion_id is already an integer (0-5)
                 detected_emotion_label = EMOTION_MAP.get(detected_emotion_id, "Unknown")
 
             # --- CONTEXT & SAFETY LOGIC START ---
