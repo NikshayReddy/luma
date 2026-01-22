@@ -1,0 +1,36 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak
+venv.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media
+staticfiles
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# Large Files
+*.csv
+# *.pkl (Model is now optimized for size)
+*.zip
+*.tar.gz
+
+# System
+.DS_Store
+Thumbs.db
