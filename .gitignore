@@ -27,9 +27,12 @@ staticfiles
 
 # Large Files
 *.csv
-# *.pkl (Model is now optimized for size)
+*.pkl
 *.zip
 *.tar.gz
+
+# Scripts
+convert_model_to_json.py
 
 # System
 .DS_Store
