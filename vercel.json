@@ -4,7 +4,11 @@
         {
             "src": "mental_health_bot/mental_health_site/wsgi.py",
             "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+            "config": { 
+                "maxLambdaSize": "15mb", 
+                "runtime": "python3.9",
+                "excludeFiles": "**.csv"
+            }
         }
     ],
     "routes": [
