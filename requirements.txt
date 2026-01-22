@@ -1,4 +1,4 @@
-django
+streamlit
 google-generativeai
 python-dotenv
 numpy
