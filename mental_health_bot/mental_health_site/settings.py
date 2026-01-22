@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*', '.vercel.app', '.now.sh', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'https://*.now.sh',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
 
 # Application definition
 
